@@ -18,6 +18,8 @@ const unsigned int playerPin1 = 8;
 const unsigned int playerPin2 = 9;
 const unsigned int playerPin3 = 10;
 const unsigned int resetPin = 5;
+const unsigned int buzz = 7;
+
 // define our  bit values for our variable "game"
 const unsigned int player1_1st = 256;
 const unsigned int player1_2nd = 128;
@@ -30,6 +32,7 @@ const unsigned int player3_2nd = 2;
 const unsigned int player3_3rd = 1;
 const unsigned int reset_timer = 32768;
 const unsigned int start_timer = 16384;
+const unsigned int buzz2 = 8192;
 //variables for switch debouncing 
 long debouncing_time = 100;
 volatile unsigned long last_micros;
@@ -59,6 +62,7 @@ void setup() {
     enableInterrupt(playerPin2, player2_button, CHANGE);
     enableInterrupt(playerPin3, player3_button, CHANGE);
     enableInterrupt(resetPin, reset_timer_int_debounce, RISING);
+    pinMode(buzz, OUTPUT);
 }
 
 void player1_button() {
@@ -167,6 +171,15 @@ void updateDisplay() {
 
 }
 
+void buzzer(){
+/* 
+ *  makes the buzzer buzz
+ */
+  digitalWrite( buzz, HIGH );  
+  delay(5000);
+  digitalWrite( buzz, LOW );
+}
+
 
 void countdown(){
     /*
@@ -185,8 +198,13 @@ void countdown(){
       delay( 1000 );
       if ( game & reset_timer ){
         x = 0;
+        
         game = game & ( 65535 - reset_timer );
       }
+    }
+    if ( game & buzz ) {
+      game = game & ( 65535 - buzz );
+      buzzer();
     }
 }
 
