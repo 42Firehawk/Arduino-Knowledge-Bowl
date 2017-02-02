@@ -1,16 +1,16 @@
 /*
- * this is the programing code for knowlegde bowl (andrews eagle project)
- * this is a 3 player button game that has a 15sec timer the the main person has a button to reset the board.
- * we used two libraries in addition to the standard. 
+ * this is the programming code for knowlegde bowl (Andrew's eagle project)
+ * this is a 3 player button game that has a 15 second timer, the main person has a button to reset the board.
+ * we used two libraries in addition to the standard libraries. 
  * LedControl is the code that runs MAX7219 display controller using the SPI BUS 
- * EnableInterrupt allows us to read the buttons as interrupts.
+ * EnableInterrupt allows buttons to be read as interrupts.
  * this uses a total of 8 digital IO pins and one variable treated as a 16 BIT binary value. 
  * 
  */
 #include "LedControl.h"                   //bring in two needed libraries
 #include "EnableInterrupt.h"              //for display and button control 
 
-//define our pin assingments
+//define pin assingments
 const unsigned int SPI_MOSI = 2;
 const unsigned int SPI_CLK = 4;
 const unsigned int SPI_CS = 3;  
@@ -20,7 +20,7 @@ const unsigned int playerPin3 = 10;
 const unsigned int resetPin = 5;
 const unsigned int buzz = 7;
 
-// define our  bit values for our variable "game"
+// define bit values for our variable "game"
 const unsigned int player1_1st = 256;
 const unsigned int player1_2nd = 128;
 const unsigned int player1_3rd = 64;
@@ -33,7 +33,7 @@ const unsigned int player3_3rd = 1;
 const unsigned int reset_timer = 32768;
 const unsigned int start_timer = 16384;
 const unsigned int buzz2 = 8192;
-//variables for switch debouncing 
+//variables for switch debouncing (prevents glitches for inputs by setting a delay between them)
 long debouncing_time = 100;
 volatile unsigned long last_micros;
 //how many display chips are we using 
@@ -48,8 +48,8 @@ LedControl lc=LedControl(SPI_MOSI,SPI_CLK,SPI_CS,MAX7219_COUNT);
 
 void setup() {
     /*
-     * this function sets up display to be blank initializes the digital pins for inputs 
-     * and asigns the interrupts to the buttons
+     * this function sets up display to be blank and initializes the digital pins for inputs
+     * and asigns the interrupts to buttons
      */
     lc.shutdown(0,false);
     lc.setIntensity(0,8);
