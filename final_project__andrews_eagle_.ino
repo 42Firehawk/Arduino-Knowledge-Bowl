@@ -11,14 +11,14 @@
 #include "EnableInterrupt.h"              //for display and button control 
 
 //define our pin assingments
-const unsigned int SPI_MOSI = 2;
+const unsigned int SPI_MOSI = 6;
 const unsigned int SPI_CLK = 4;
 const unsigned int SPI_CS = 3;  
 const unsigned int playerPin1 = 8;
 const unsigned int playerPin2 = 9;
 const unsigned int playerPin3 = 10;
 const unsigned int resetPin = 5;
-const unsigned int buzz = 7;
+const unsigned int buzz = 13;
 
 // define our  bit values for our variable "game"
 const unsigned int player1_1st = 256;
