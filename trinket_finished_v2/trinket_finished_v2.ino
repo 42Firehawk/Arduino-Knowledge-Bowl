@@ -43,7 +43,7 @@ const unsigned int MAX7219_COUNT = 1;
 volatile int  game = 0;
 //defining how LedControl will use the pins 
 LedControl lc=LedControl(SPI_MOSI,SPI_CLK,SPI_CS,MAX7219_COUNT);
-unsigned int x,y;
+unsigned int x,y,d1,d2;
 
 
 
@@ -186,62 +186,17 @@ void buzzer(){
 }
 
 
-void countdown(){
-    /*
-     * this code is run anytime the code needs a counter
-     * this function also maintains the player placement display
-     * and watches for the reset bit to be set and bails the countdown early 
-     * if it is seen 
-     */
-     
-    /*game = game & ( 65535 - reset_timer );*/
-    for ( int x=15; x>=0; x-- ){
-      int d1=int( x/10 );
-      int d2=int( x - ( d1 * 10 ) );
-      lc.setDigit( 0,4,d1,0 );
-      lc.setDigit( 0,5,d2,0 );
-      updateDisplay();
-      delay( 1000 );
-     
-     /* if (x == 0)
-       digitalWrite( buzz, HIGH );
-      if ( game & reset_timer )  {
-        x = 0;
-        digitalWrite( buzz, LOW );
-        game = game & ( 65535 - reset_timer );
-      }*/
-    }
-    /*if ( game & buzz ) {
-      game = game & ( 65535 - buzz );
-      buzzer();
-    }*/
-    
-}
-
-
-
-    /*
-     * the main loop simple waits for a button to be pressed 
-     * once that happens it starts the countdown 
-     */
-    /*while( not ( ( game & start_timer ) | ( game & reset_timer ) ) ){
-    }
-    game = game & ( 65535 - start_timer );
-    countdown(); */
 void loop() {
-  while( game & not ( player1_1st + player2_1st + player3_1st )) {}
+  while( not (game & start_timer )) {}
   while (1) {
-    while( digitalRead (5)) {}
-    reset_timer_int();
-    digitalWrite( buzz, LOW );
-    while( not ( digitalRead(5))){}
+    
     x = 16;
     while (x > 1){
       x = x-1;
-      int d1=int( x/10 );
-      int d2=int( x - ( d1 * 10 ) );
-      lc.setDigit( 0,4,d1,0 );
-      lc.setDigit( 0,5,d2,0 );
+      d1=int( x/10 );
+      d2=int( x - ( d1 * 10 ) );
+      lc.setDigit( 0,5,d1,0 );
+      lc.setDigit( 0,4,d2,0 );
       y=10;
         while (y > 0){
            if  (digitalRead(5)){
@@ -252,12 +207,21 @@ void loop() {
         }
        
       }
-      x = x-1;
-      int d1=int( x/10 );
-      int d2=int( x - ( d1 * 10 ) );
-      lc.setDigit( 0,4,d1,0 );
-      lc.setDigit( 0,5,d2,0 );
-      digitalWrite( buzz, HIGH );
+    x = x-1;
+    d1=int( x/10 );
+    d2=int( x - ( d1 * 10 ) );
+    lc.setDigit( 0,5,d1,0 );
+    lc.setDigit( 0,4,d2,0 );
+    digitalWrite( buzz, HIGH );
+    while( digitalRead (5)) {}
+    reset_timer_int();
+    x = 15;
+    d1=int( x/10 );
+    d2=int( x - ( d1 * 10 ) );
+    lc.setDigit( 0,5,d1,0 );
+    lc.setDigit( 0,4,d2,0 );
+    digitalWrite( buzz, LOW );
+    while( not ( digitalRead(5))){}
    }
 }   
       
